@@ -139,6 +139,17 @@ def generate_html_itinerary():
 
 
 def main():
+    # Check for API keys
+    if not os.getenv("OPENAI_API_KEY"):
+         st.error("⚠️ OPENAI_API_KEY is missing!")
+         st.info("To fix this, go to your Streamlit App settings -> Secrets and add your OpenAI API key.")
+         st.code('OPENAI_API_KEY = "sk-..."', language="toml")
+         st.stop()
+         
+    if not os.getenv("SERPAPI_API_KEY"):
+         st.warning("⚠️ SERPAPI_API_KEY is missing. Search functionality may not work.")
+         st.info("Add it to Streamlit Secrets if you want live travel data.")
+
     initialize_agent()
     
     # Sidebar
