@@ -17,21 +17,8 @@ if %errorlevel% neq 0 (
 echo Git is installed!
 echo.
 echo initializing repository...
-git init
-git add .
-git commit -m "Initial commit of AI Travel Agent"
-git branch -M main
-
-echo.
-echo ========================================================
-echo   IMPORTANT: You need your GitHub Repository URL.
-echo   Create a repo at https://github.com/new if you haven't.
-echo ========================================================
-echo.
-set /p repo_url="Paste your GitHub Repository URL here: "
-
-git remote add origin %repo_url%
-git push -u origin main
+"C:\Program Files\Git\cmd\git.exe" remote add origin %repo_url%
+"C:\Program Files\Git\cmd\git.exe" push -u origin main
 
 echo.
 echo Done! If asked for credentials, please sign in.
