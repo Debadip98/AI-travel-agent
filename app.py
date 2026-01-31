@@ -140,10 +140,10 @@ def generate_html_itinerary():
 
 def main():
     # Check for API keys
-    if not os.getenv("OPENAI_API_KEY"):
-         st.error("⚠️ OPENAI_API_KEY is missing!")
-         st.info("To fix this, go to your Streamlit App settings -> Secrets and add your OpenAI API key.")
-         st.code('OPENAI_API_KEY = "sk-..."', language="toml")
+    if not os.getenv("GOOGLE_API_KEY"):
+         st.error("⚠️ GOOGLE_API_KEY is missing!")
+         st.info("To fix this, go to your Streamlit App settings -> Secrets and add your Google API key.")
+         st.code('GOOGLE_API_KEY = "AIza..."', language="toml")
          st.stop()
          
     if not os.getenv("SERPAPI_API_KEY"):

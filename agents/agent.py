@@ -7,7 +7,7 @@ from typing import Annotated, TypedDict
 
 from dotenv import load_dotenv
 from langchain_core.messages import AnyMessage, HumanMessage, SystemMessage, ToolMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, StateGraph
 # from sendgrid import SendGridAPIClient
@@ -134,7 +134,7 @@ class Agent:
 
     def __init__(self):
         self._tools = {t.name: t for t in TOOLS}
-        self._tools_llm = ChatOpenAI(model='gpt-4o').bind_tools(TOOLS)
+        self._tools_llm = ChatGoogleGenerativeAI(model='gemini-1.5-pro').bind_tools(TOOLS)
 
         builder = StateGraph(AgentState)
         builder.add_node('call_tools_llm', self.call_tools_llm)
@@ -159,7 +159,7 @@ class Agent:
 
     def email_sender(self, state: AgentState):
         print('Generating itinerary HTML...')
-        email_llm = ChatOpenAI(model='gpt-4o', temperature=0.1)
+        email_llm = ChatGoogleGenerativeAI(model='gemini-1.5-pro', temperature=0.1)
         email_message = [SystemMessage(content=EMAILS_SYSTEM_PROMPT), HumanMessage(content=state['messages'][-1].content)]
         email_response = email_llm.invoke(email_message)
         print('Itinerary generated.')
