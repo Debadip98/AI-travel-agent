@@ -1,0 +1,50 @@
+name: AI Travel Agent CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+    
+    - name: Run linting
+      run: |
+        pip install flake8
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Test environment setup (without API keys)
+      run: |
+        python -c "from agents.tools.flights_finder import flights_finder; from agents.tools.hotels_finder import hotels_finder; from agents.tools.search_tool import search_tool; print('✅ All tools imported successfully')"
+    
+    - name: Test Gemini connection (if secrets available)
+      if: ${{ secrets.GOOGLE_API_KEY != '' }}
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+      run: |
+        python test_agent.py
+    
+    - name: Check Streamlit app syntax
+      run: |
+        python -m py_compile app.py
+        python -m py_compile agents/agent.py

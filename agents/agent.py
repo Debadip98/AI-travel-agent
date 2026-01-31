@@ -134,7 +134,7 @@ class Agent:
 
     def __init__(self):
         self._tools = {t.name: t for t in TOOLS}
-        self._tools_llm = ChatGoogleGenerativeAI(model='gemini-1.5-pro-latest').bind_tools(TOOLS)
+        self._tools_llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp').bind_tools(TOOLS)
 
         builder = StateGraph(AgentState)
         builder.add_node('call_tools_llm', self.call_tools_llm)
@@ -159,7 +159,7 @@ class Agent:
 
     def email_sender(self, state: AgentState):
         print('Generating itinerary HTML...')
-        email_llm = ChatGoogleGenerativeAI(model='gemini-1.5-pro-latest', temperature=0.1)
+        email_llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', temperature=0.1)
         email_message = [SystemMessage(content=EMAILS_SYSTEM_PROMPT), HumanMessage(content=state['messages'][-1].content)]
         email_response = email_llm.invoke(email_message)
         print('Itinerary generated.')
